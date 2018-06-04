@@ -21,13 +21,21 @@ class UsersController extends Controller
 
     public function edit(User $user)
     {
-        $this->authorize('update', $user);
+        try {
+            $this->authorize('update', $user);
+        } catch (\Exception $e) {
+            return redirect()->route('users.show',$user->id);
+        }
         return view('users.edit', compact('user'));
     }
 
     public function update(UserRequest $request, ImageUploadHandler $uploader, User $user)
     {
-        $this->authorize('update', $user);
+        try {
+            $this->authorize('update', $user);
+        } catch (\Exception $e) {
+            return redirect()->route('users.show',$user->id);
+        }
         $data = $request->all();
 
         if ($request->avatar) {
